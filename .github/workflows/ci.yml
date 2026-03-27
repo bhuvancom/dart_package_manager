@@ -7,7 +7,7 @@ on:
     branches: [ master ]
 
 jobs:
-  test:
+  Validate_And_Test:
     runs-on: ubuntu-latest
 
     steps:
