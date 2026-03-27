@@ -5,6 +5,7 @@ import 'package:dart_package_manager/src/domain/repositories/file_system_reposit
 import 'package:dart_package_manager/src/domain/use_cases/analyze_dependencies_use_case.dart';
 
 class MockPubspecRepository extends Mock implements PubspecRepository {}
+
 class MockFileSystemRepository extends Mock implements FileSystemRepository {}
 
 void main() {
@@ -28,9 +29,12 @@ void main() {
       final devDeps = {'test', 'mocktail'};
       final used = {'http', 'test'}; // provider and path are unused
 
-      when(() => mockPubspecRepo.getDependencies()).thenAnswer((_) async => deps);
-      when(() => mockPubspecRepo.getDevDependencies()).thenAnswer((_) async => devDeps);
-      when(() => mockFileSystemRepo.scanForUsedPackages(any())).thenAnswer((_) async => used);
+      when(() => mockPubspecRepo.getDependencies())
+          .thenAnswer((_) async => deps);
+      when(() => mockPubspecRepo.getDevDependencies())
+          .thenAnswer((_) async => devDeps);
+      when(() => mockFileSystemRepo.scanForUsedPackages(any()))
+          .thenAnswer((_) async => used);
 
       // Act
       final result = await useCase.execute();
@@ -49,9 +53,12 @@ void main() {
       final devDeps = <String>{};
       final used = <String>{}; // provider is unused
 
-      when(() => mockPubspecRepo.getDependencies()).thenAnswer((_) async => deps);
-      when(() => mockPubspecRepo.getDevDependencies()).thenAnswer((_) async => devDeps);
-      when(() => mockFileSystemRepo.scanForUsedPackages(any())).thenAnswer((_) async => used);
+      when(() => mockPubspecRepo.getDependencies())
+          .thenAnswer((_) async => deps);
+      when(() => mockPubspecRepo.getDevDependencies())
+          .thenAnswer((_) async => devDeps);
+      when(() => mockFileSystemRepo.scanForUsedPackages(any()))
+          .thenAnswer((_) async => used);
 
       // Act
       final result = await useCase.execute(manualIgnores: {'provider'});

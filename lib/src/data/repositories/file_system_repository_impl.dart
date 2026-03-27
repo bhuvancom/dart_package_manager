@@ -3,9 +3,11 @@ import '../../domain/repositories/file_system_repository.dart';
 
 class FileSystemRepositoryImpl implements FileSystemRepository {
   @override
-  Future<Set<String>> scanForUsedPackages(List<String> directoriesToScan) async {
+  Future<Set<String>> scanForUsedPackages(
+      List<String> directoriesToScan) async {
     final usedPackages = <String>{};
-    final importRegex = RegExp(r"(?:import|export)\s+['""]package:([a-zA-Z0-9_]+)/");
+    final importRegex =
+        RegExp(r"(?:import|export)\s+['" "]package:([a-zA-Z0-9_]+)/");
 
     for (final dirName in directoriesToScan) {
       final dir = Directory(dirName);
@@ -48,7 +50,8 @@ class FileSystemRepositoryImpl implements FileSystemRepository {
         if (await dir.exists()) {
           await dir.delete(recursive: true);
         }
-      } else if (type == FileSystemEntityType.file || type == FileSystemEntityType.link) {
+      } else if (type == FileSystemEntityType.file ||
+          type == FileSystemEntityType.link) {
         final file = File(path);
         if (await file.exists()) {
           await file.delete();

@@ -6,7 +6,8 @@ class SystemRepositoryImpl implements SystemRepository {
   Future<void> runCommand(String executable, List<String> arguments) async {
     final result = await Process.run(executable, arguments);
     if (result.exitCode != 0) {
-      throw Exception('Failed to run $executable ${arguments.join(" ")}: ${result.stderr}');
+      throw Exception(
+          'Failed to run $executable ${arguments.join(" ")}: ${result.stderr}');
     }
   }
 }

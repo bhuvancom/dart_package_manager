@@ -15,18 +15,18 @@ class CleanProjectUseCase {
 
   Future<void> execute(void Function(String) onProgress) async {
     final dirsToDelete = [
-      '.dart_tool', 
-      'build', 
-      'ios/Pods', 
-      'macos/Pods', 
-      'pubspec.lock', 
-      'ios/Podfile.lock', 
+      '.dart_tool',
+      'build',
+      'ios/Pods',
+      'macos/Pods',
+      'pubspec.lock',
+      'ios/Podfile.lock',
       'macos/Podfile.lock'
     ];
-    
+
     onProgress('Deleting cache directories and lockfiles...');
     await fileSystemRepository.deletePaths(dirsToDelete);
-    
+
     final isFlutter = await pubspecRepository.isFlutterProject();
     final executable = isFlutter ? 'flutter' : 'dart';
 
@@ -38,7 +38,7 @@ class CleanProjectUseCase {
         // flutter clean might fail gracefully if no build dir
       }
     }
-    
+
     onProgress('Running $executable pub get...');
     await systemRepository.runCommand(executable, ['pub', 'get']);
   }

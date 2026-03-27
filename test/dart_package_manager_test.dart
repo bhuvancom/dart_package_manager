@@ -6,7 +6,7 @@ void main() {
     test('exports run function', () {
       expect(run, isA<Function>());
     });
-    
+
     test('run function has correct signature', () {
       expect(run, isA<Future<void> Function(List<String>)>());
     });

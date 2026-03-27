@@ -14,9 +14,10 @@ class AnalyzeDependenciesUseCase {
   Future<AnalysisResult> execute({Set<String> manualIgnores = const {}}) async {
     final deps = await pubspecRepository.getDependencies();
     final devDeps = await pubspecRepository.getDevDependencies();
-    
-    final usedPackages = await fileSystemRepository.scanForUsedPackages(['lib', 'bin', 'test', 'example']);
-    
+
+    final usedPackages = await fileSystemRepository
+        .scanForUsedPackages(['lib', 'bin', 'test', 'example']);
+
     // Combine all packages that should be treated as "used"
     final allKnownUsed = {
       ...usedPackages,
@@ -25,14 +26,14 @@ class AnalyzeDependenciesUseCase {
     };
 
     final unusedDeps = deps.where((p) => !allKnownUsed.contains(p)).toSet();
-    final unusedDevDeps = devDeps.where((p) => !allKnownUsed.contains(p)).toSet();
-    
+    final unusedDevDeps =
+        devDeps.where((p) => !allKnownUsed.contains(p)).toSet();
+
     return AnalysisResult(
-        unusedDependencies: unusedDeps, 
+        unusedDependencies: unusedDeps,
         unusedDevDependencies: unusedDevDeps,
         totalDependencies: deps.length,
-        totalDevDependencies: devDeps.length
-    );
+        totalDevDependencies: devDeps.length);
   }
 }
 
@@ -42,10 +43,9 @@ class AnalysisResult {
   final int totalDependencies;
   final int totalDevDependencies;
 
-  AnalysisResult({
-    required this.unusedDependencies, 
-    required this.unusedDevDependencies, 
-    required this.totalDependencies, 
-    required this.totalDevDependencies
-  });
+  AnalysisResult(
+      {required this.unusedDependencies,
+      required this.unusedDevDependencies,
+      required this.totalDependencies,
+      required this.totalDevDependencies});
 }

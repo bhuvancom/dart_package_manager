@@ -11,5 +11,6 @@ class SuggestedPackage {
 }
 
 abstract class AISuggestionRepository {
-  Future<List<SuggestedPackage>> getSuggestions(String requirement, {String? apiKey, String? modelName, String? language});
+  Future<List<SuggestedPackage>> getSuggestions(String requirement,
+      {String? apiKey, String? modelName, String? language});
 }

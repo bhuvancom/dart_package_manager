@@ -49,7 +49,8 @@ class Engine {
         logger.detail('Found vulnerability config in pubspec for ${pkg.name}');
       } else if (pkg.currentVersion != null) {
         // Fallback to OSV database query
-        logger.detail('Checking OSV database for vulnerabilities in ${pkg.name} ${pkg.currentVersion}...');
+        logger.detail(
+            'Checking OSV database for vulnerabilities in ${pkg.name} ${pkg.currentVersion}...');
         isVulnerable = await _vulnChecker.hasVulnerabilities(
             pkg.name, pkg.currentVersion!);
       }
@@ -81,7 +82,8 @@ class Engine {
 
     final executable = isFlutter ? 'flutter' : 'dart';
 
-    logger.detail('Running command: $executable pub add $packageName:^$version');
+    logger
+        .detail('Running command: $executable pub add $packageName:^$version');
     final result =
         await Process.run(executable, ['pub', 'add', '$packageName:^$version']);
 

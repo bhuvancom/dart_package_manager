@@ -28,9 +28,12 @@ class PackageInfo {
       latestVersion: json['latest']?['version'] as String?,
       isDiscontinued: json['isDiscontinued'] == true,
       hasVulnerability: false, // We will map this later
-      advisoryUrl: null,       // We will map this later
+      advisoryUrl: null, // We will map this later
     );
   }
 
-  bool get canUpdate => currentVersion != null && latestVersion != null && currentVersion != latestVersion;
+  bool get canUpdate =>
+      currentVersion != null &&
+      latestVersion != null &&
+      currentVersion != latestVersion;
 }

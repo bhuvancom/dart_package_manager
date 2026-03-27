@@ -22,8 +22,14 @@ class AnalyzeCommand extends Command {
   @override
   Future<void> run() async {
     final logger = Logger();
-    final ignoreList = argResults?['ignore']?.toString().split(',').map((e) => e.trim()).where((e) => e.isNotEmpty).toSet() ?? {};
-    
+    final ignoreList = argResults?['ignore']
+            ?.toString()
+            .split(',')
+            .map((e) => e.trim())
+            .where((e) => e.isNotEmpty)
+            .toSet() ??
+        {};
+
     final pubspecRepo = PubspecRepositoryImpl();
     final fileSystemRepo = FileSystemRepositoryImpl();
     final useCase = AnalyzeDependenciesUseCase(
@@ -31,8 +37,9 @@ class AnalyzeCommand extends Command {
       fileSystemRepository: fileSystemRepo,
     );
 
-    final scanSpin = logger.progress('Scanning Dart files and analyzing dependencies...');
-    
+    final scanSpin =
+        logger.progress('Scanning Dart files and analyzing dependencies...');
+
     AnalysisResult result;
     try {
       result = await useCase.execute(manualIgnores: ignoreList);
@@ -42,7 +49,8 @@ class AnalyzeCommand extends Command {
       return;
     }
 
-    if (result.unusedDependencies.isEmpty && result.unusedDevDependencies.isEmpty) {
+    if (result.unusedDependencies.isEmpty &&
+        result.unusedDevDependencies.isEmpty) {
       if (result.totalDependencies == 0 && result.totalDevDependencies == 0) {
         logger.info('No dependencies found to analyze.');
         return;
@@ -51,8 +59,9 @@ class AnalyzeCommand extends Command {
       return;
     }
 
-    logger.info('\n${lightYellow.wrap('⚠️  The following packages might be unused:')}');
-    
+    logger.info(
+        '\n${lightYellow.wrap('⚠️  The following packages might be unused:')}');
+
     if (result.unusedDependencies.isNotEmpty) {
       logger.info('\n${styleBold.wrap('Dependencies:')}');
       for (var pkg in result.unusedDependencies) {
@@ -67,6 +76,7 @@ class AnalyzeCommand extends Command {
       }
     }
 
-    logger.info('\n${darkGray.wrap('(Note: If a package provides a terminal executable, it might legally have no imports. Double check before removing!)')}');
+    logger.info(
+        '\n${darkGray.wrap('(Note: If a package provides a terminal executable, it might legally have no imports. Double check before removing!)')}');
   }
 }

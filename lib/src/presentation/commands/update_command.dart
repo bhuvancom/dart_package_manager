@@ -4,9 +4,10 @@ import '../../ui.dart';
 class UpdateCommand extends Command {
   @override
   final String name = 'update';
-  
+
   @override
-  final String description = 'Interactively check and update package dependencies.';
+  final String description =
+      'Interactively check and update package dependencies.';
 
   UpdateCommand() {
     argParser.addFlag(

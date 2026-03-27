@@ -52,8 +52,12 @@ class CLIUI {
     ];
 
     for (var pkg in updatable) {
-      String vulnStr = pkg.hasVulnerability ? red.wrap('⚠️ VULNERABLE')! : green.wrap('✅ Safe')!;
-      String updateStr = pkg.canUpdate ? yellow.wrap('Update Available'.padRight(18))! : green.wrap('Up to Date      ')!;
+      String vulnStr = pkg.hasVulnerability
+          ? red.wrap('⚠️ VULNERABLE')!
+          : green.wrap('✅ Safe')!;
+      String updateStr = pkg.canUpdate
+          ? yellow.wrap('Update Available'.padRight(18))!
+          : green.wrap('Up to Date      ')!;
 
       table.add([
         pkg.name,
@@ -71,7 +75,8 @@ class CLIUI {
       final latestStr = row[2].padRight(12);
       final updateStr = isHeader ? row[3].padRight(18) : row[3];
       final vulnStr = row[4];
-      _logger.info('$nameStr | $currentStr | $latestStr | $updateStr | $vulnStr');
+      _logger
+          .info('$nameStr | $currentStr | $latestStr | $updateStr | $vulnStr');
     }
 
     _logger.info('');
@@ -87,7 +92,8 @@ class CLIUI {
       return;
     }
 
-    _logger.info('Select packages to update using Spacebar, then press Enter (Enter with 0 selections to skip):');
+    _logger.info(
+        'Select packages to update using Spacebar, then press Enter (Enter with 0 selections to skip):');
 
     final selections = MultiSelect(
       prompt: 'Packages to update',
@@ -110,15 +116,16 @@ class CLIUI {
     if (wantChangelogs) {
       _logger.info('\n${styleBold.wrap('Changelogs:')}');
       for (var pkg in selectedPackages) {
-        _logger.info('📦 ${pkg.name}: ${lightCyan.wrap('https://pub.dev/packages/${pkg.name}/changelog')}');
+        _logger.info(
+            '📦 ${pkg.name}: ${lightCyan.wrap('https://pub.dev/packages/${pkg.name}/changelog')}');
       }
       _logger.info('');
-      
+
       final proceed = Confirm(
         prompt: 'Proceed with updates?',
         defaultValue: true,
       ).interact();
-      
+
       if (!proceed) {
         _logger.info('Update cancelled.');
         return;

@@ -10,7 +10,8 @@ class CleanCommand extends Command {
   final String name = 'clean';
 
   @override
-  final String description = 'Deep clean cache directories, lockfiles, and strictly reinstall dependencies.';
+  final String description =
+      'Deep clean cache directories, lockfiles, and strictly reinstall dependencies.';
 
   @override
   Future<void> run() async {
@@ -31,7 +32,8 @@ class CleanCommand extends Command {
       await useCase.execute((progressMessage) {
         spin.update(progressMessage);
       });
-      spin.complete('Deep clean complete! Your project is fresh and ready to go. 🎉');
+      spin.complete(
+          'Deep clean complete! Your project is fresh and ready to go. 🎉');
     } catch (e) {
       spin.fail('Deep clean failed: ${e.toString()}');
     }

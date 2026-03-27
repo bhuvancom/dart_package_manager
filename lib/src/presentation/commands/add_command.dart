@@ -12,7 +12,8 @@ class AddCommand extends Command {
   final String name = 'add';
 
   @override
-  final String description = 'Interactively search pub.dev and install a package.';
+  final String description =
+      'Interactively search pub.dev and install a package.';
 
   @override
   Future<void> run() async {
@@ -20,7 +21,8 @@ class AddCommand extends Command {
     final logger = Logger();
 
     if (query.isEmpty) {
-      logger.err('Please provide a search query. Example: dpm add state management');
+      logger.err(
+          'Please provide a search query. Example: dpm add state management');
       return;
     }
 
@@ -30,7 +32,7 @@ class AddCommand extends Command {
     final useCase = SearchPackagesUseCase(repository: pubDevRepo);
 
     final spin = logger.progress('Searching pub.dev for "$query"...');
-    
+
     List<PackageDetails> results;
     try {
       results = await useCase.execute(query);
@@ -48,7 +50,9 @@ class AddCommand extends Command {
     final options = results.map((r) {
       final name = styleBold.wrap(r.name.padRight(20))!;
       final likes = lightCyan.wrap('👍 ${r.likes}')!.padRight(12);
-      final desc = darkGray.wrap(r.description.length > 50 ? '${r.description.substring(0, 47)}...' : r.description)!;
+      final desc = darkGray.wrap(r.description.length > 50
+          ? '${r.description.substring(0, 47)}...'
+          : r.description)!;
       return '$name | $likes | $desc';
     }).toList();
 
@@ -66,15 +70,19 @@ class AddCommand extends Command {
     }
 
     final selectedPackage = results[selection];
-    
-    final installSpin = logger.progress('Installing ${selectedPackage.name}...');
+
+    final installSpin =
+        logger.progress('Installing ${selectedPackage.name}...');
     try {
       final isFlutter = await pubspecRepo.isFlutterProject();
       final executable = isFlutter ? 'flutter' : 'dart';
-      await systemRepo.runCommand(executable, ['pub', 'add', selectedPackage.name]);
-      installSpin.complete('${selectedPackage.name} installed successfully! 🎉');
+      await systemRepo
+          .runCommand(executable, ['pub', 'add', selectedPackage.name]);
+      installSpin
+          .complete('${selectedPackage.name} installed successfully! 🎉');
     } catch (e) {
-      installSpin.fail('Failed to install ${selectedPackage.name}: ${e.toString()}');
+      installSpin
+          .fail('Failed to install ${selectedPackage.name}: ${e.toString()}');
     }
   }
 }
