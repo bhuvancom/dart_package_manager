@@ -1,4 +1,8 @@
 # 📦 Dart Package Manager (DPM)
+[![CI](https://github.com/bhuvancom/dart_package_manager/actions/workflows/ci.yml/badge.svg)](https://github.com/bhuvancom/dart_package_manager/actions/workflows/ci.yml) 
+[![Auto Tag](https://github.com/bhuvancom/dart_package_manager/actions/workflows/auto_tag.yml/badge.svg)](https://github.com/bhuvancom/dart_package_manager/actions/workflows/auto_tag.yml) [![CI](https://github.com/bhuvancom/dart_package_manager/actions/workflows/publish.yml/badge.svg)](https://github.com/bhuvancom/dart_package_manager/actions/workflows/publish.yml)
+
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 **DPM** is a stunning, feature-rich, and interactive CLI built to modernize dependency management for Dart and Flutter. It goes beyond simple updates, providing a full suite of tools for optimization, security, and monorepo management.
 
