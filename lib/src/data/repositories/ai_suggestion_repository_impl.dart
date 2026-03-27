@@ -4,7 +4,7 @@ import '../../domain/repositories/ai_suggestion_repository.dart';
 
 class AISuggestionRepositoryImpl implements AISuggestionRepository {
   @override
-  Future<List<SuggestedPackage>> getSuggestions(String requirement, {String? apiKey, String? modelName}) async {
+  Future<List<SuggestedPackage>> getSuggestions(String requirement, {String? apiKey, String? modelName, String? language}) async {
     if (apiKey == null || apiKey.isEmpty) {
       throw Exception('DPM_API_KEY environment variable is not set. AI features require an API key.');
     }
@@ -12,11 +12,13 @@ class AISuggestionRepositoryImpl implements AISuggestionRepository {
     final modelId = modelName ?? 'gemini-1.5-flash';
     final model = GenerativeModel(model: modelId, apiKey: apiKey);
     
+    final targetLanguage = language ?? 'English';
     final prompt = '''
 You are a Dart/Flutter expert. Given the following user requirement for a package, find the top 3 best-matched packages from pub.dev.
 Provide the response as a valid JSON array of objects with keys: "name", "reasoning", "confidence" (0.0 to 1.0).
 
 Requirement: "$requirement"
+Target Language for "reasoning": "$targetLanguage"
 
 JSON Response:
 ''';

@@ -21,10 +21,9 @@ class SuggestCommand extends Command {
       help: 'Google AI Studio API Key (overrides DPM_API_KEY env var).',
     );
     argParser.addOption(
-      'model',
-      abbr: 'm',
-      help: 'Gemini model to use.',
-      defaultsTo: 'gemini-1.5-flash',
+      'lang',
+      abbr: 'l',
+      help: 'Language for AI reasoning (defaults to machine locale).',
     );
   }
 
@@ -32,6 +31,8 @@ class SuggestCommand extends Command {
   Future<void> run() async {
     final requirement = argResults?.rest.join(' ') ?? '';
     final modelName = argResults?['model'];
+    final machineLocale = Platform.localeName.split('_')[0]; // e.g. "en" from "en_US"
+    final language = argResults?['lang'] ?? machineLocale;
     final logger = Logger();
 
     if (requirement.isEmpty) {
@@ -50,10 +51,10 @@ class SuggestCommand extends Command {
     final aiRepo = AISuggestionRepositoryImpl();
     final useCase = SuggestPackagesUseCase(repository: aiRepo);
 
-    final spin = logger.progress('AI ($modelName) is analyzing your requirement...');
+    final spin = logger.progress('AI ($modelName) is analyzing your requirement in $language...');
 
     try {
-      final suggestions = await useCase.execute(requirement, apiKey: apiKey, modelName: modelName);
+      final suggestions = await useCase.execute(requirement, apiKey: apiKey, modelName: modelName, language: language);
       spin.complete('AI has found matching packages! 🤖');
 
       if (suggestions.isEmpty) {
@@ -67,22 +68,26 @@ class SuggestCommand extends Command {
         logger.info(darkGray.wrap('   ${s.reasoning}')!);
       }
 
-      logger.info('\nWould you like to install one of these?');
+      final promptText = language == 'es' ? '¿Te gustaría instalar uno de estos?' : 'Would you like to install one of these?';
+      logger.info('\n$promptText');
+      
       final options = suggestions.map((s) => s.name).toList();
-      options.add(red.wrap('❌ Cancel')!);
+      final cancelText = language == 'es' ? '❌ Cancelar' : '❌ Cancel';
+      options.add(red.wrap(cancelText)!);
 
       final selection = Select(
-        prompt: 'Select to install',
+        prompt: language == 'es' ? 'Seleccionar para instalar' : 'Select to install',
         options: options,
       ).interact();
 
       if (selection == suggestions.length) {
-        logger.info('Cancelled.');
+        logger.info(language == 'es' ? 'Cancelado.' : 'Cancelled.');
         return;
       }
 
       final selectedPkg = suggestions[selection];
-      final installSpin = logger.progress('Installing ${selectedPkg.name}...');
+      final installingText = language == 'es' ? 'Instalando ${selectedPkg.name}...' : 'Installing ${selectedPkg.name}...';
+      final installSpin = logger.progress(installingText);
       
       final pubspecRepo = PubspecRepositoryImpl();
       final systemRepo = SystemRepositoryImpl();
@@ -90,7 +95,8 @@ class SuggestCommand extends Command {
       final executable = isFlutter ? 'flutter' : 'dart';
       
       await systemRepo.runCommand(executable, ['pub', 'add', selectedPkg.name]);
-      installSpin.complete('${selectedPkg.name} installed successfully! 🎉');
+      final successText = language == 'es' ? '${selectedPkg.name} instalado con éxito! 🎉' : '${selectedPkg.name} installed successfully! 🎉';
+      installSpin.complete(successText);
       
     } catch (e) {
       spin.fail('AI Suggestion failed: ${e.toString()}');

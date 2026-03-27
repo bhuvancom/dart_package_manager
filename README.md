@@ -95,6 +95,8 @@ dpm clean -r
 dpm update --verbose
 ```
 
+For automated testing and publishing setup, see our [Deployment Guide](DEPLOYMENT.md).
+
 ---
 
 ## 🏗 Architecture
