@@ -1,0 +1,35 @@
+name: Auto Tag
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  tag:
+    runs-on: ubuntu-latest
+    if: github.repository == 'bhuvancom/dart_package_manager'
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.MY_PAT || secrets.GITHUB_TOKEN }}
+
+      - name: Extract Version
+        id: get_version
+        run: |
+          VERSION=$(grep 'version:' pubspec.yaml | sed 's/version: //')
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Detected version: $VERSION"
+
+      - name: Create and Push Tag
+        run: |
+          VERSION="v${{ steps.get_version.outputs.version }}"
+          if git rev-parse "$VERSION" >/dev/null 2>&1; then
+            echo "Tag $VERSION already exists. Skipping."
+          else
+            echo "Creating tag $VERSION"
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git tag "$VERSION"
+            git push origin "$VERSION"
+          fi
