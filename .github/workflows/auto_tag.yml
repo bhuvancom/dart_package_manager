@@ -5,8 +5,10 @@ on:
     branches: [ master ]
 
 jobs:
-  tag:
+  create_tag:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     if: github.repository == 'bhuvancom/dart_package_manager'
 
     steps:
